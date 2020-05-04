@@ -72,3 +72,54 @@ exports.signup = (req, res) => {
             });
     });
 };
+
+exports.accountActivation = (req, res) => {
+    const { token } = req.body;
+
+    if (token) {
+        jwt.verify(token, process.env.JWT_ACCOUNT_ACTIVATION, function(err, decoded) {
+            if (err) {
+                console.log('JWT VERIFY IN ACCOUNT ACTIVATION ERROR', err);
+                return res.status(401).json({
+                    error: 'Expired link. Signup again'
+                });
+            }
+
+            const { name, email, password } = jwt.decode(token);
+
+            const user = new User({ name, email, password });
+
+            user.save((err, user) => {
+                if (err) {
+                    console.log('SAVE USER IN ACCOUNT ACTIVATION ERROR', err);
+                    return res.status(401).json({
+                        error: 'Error saving user in database. Try signup again'
+                    });
+                }
+                return res.json({
+                    message: 'Signup success. Please signin.'
+                });
+            });
+        });
+    } else {
+        return res.json({
+            message: 'Something went wrong. Try again.'
+        });
+    }
+};
+
+exports.signin = (req, res) => {
+    const { email, password } = req.body;
+    // check if user exist
+    User.findOne({ email }).exec((err, user) => {
+        if (err || !user) {
+            return res.status(400).json({
+                error: 'User with that email does not exist. Please signup'
+            });
+        }
+        // authenticate
+        if (!user.authenticate(password)) {
+            return res.status(400).json({
+                error: 'Email and password do not match'
+            });
+        }
