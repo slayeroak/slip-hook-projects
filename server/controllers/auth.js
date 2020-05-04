@@ -61,7 +61,7 @@ exports.signup = (req, res) => {
             .then(sent => {
                 // console.log('SIGNUP EMAIL SENT', sent)
                 return res.json({
-                    message: `Email has been sent to ${email}. Follow the instruction to activate your Slip Hook account`
+                    message: `Email has been sent to ${email}. Follow the instruction to activate your account`
                 });
             })
             .catch(err => {
@@ -123,3 +123,13 @@ exports.signin = (req, res) => {
                 error: 'Email and password do not match'
             });
         }
+        // generate a token and send to client
+        const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
+        const { _id, name, email, role } = user;
+
+        return res.json({
+            token,
+            user: { _id, name, email, role }
+        });
+    });
+};
