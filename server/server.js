@@ -3,12 +3,7 @@ const morgan = require('morgan');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-// require('dotenv').config({ path: 'ENV_FILENAME' });
-// require('dotenv').config();
-const dotenv = require("dotenv");
-
-dotenv.config();
-
+require('dotenv').config();
 
 const app = express();
 
