@@ -1,1 +1,0 @@
-# slip-hook-projects

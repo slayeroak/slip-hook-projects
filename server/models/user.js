@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const crypto = require('crypto');
- 
-const userSchema = new mongoose.Schema(
+// user schema
+const userScheama = new mongoose.Schema(
     {
         name: {
             type: String,
@@ -32,27 +32,25 @@ const userSchema = new mongoose.Schema(
     },
     { timestamps: true }
 );
- 
-userSchema
+
+// virtual
+userScheama
     .virtual('password')
     .set(function(password) {
-        // create a temporarity variable called _password
         this._password = password;
-        // generate salt
         this.salt = this.makeSalt();
-        // encryptPassword
         this.hashed_password = this.encryptPassword(password);
     })
     .get(function() {
         return this._password;
     });
- 
-    // methods
-userSchema.methods = {
+
+// methods
+userScheama.methods = {
     authenticate: function(plainText) {
-        return this.encryptPassword(plainText) === this.hashed_password;
+        return this.encryptPassword(plainText) === this.hashed_password; // true false
     },
- 
+
     encryptPassword: function(password) {
         if (!password) return '';
         try {
@@ -64,10 +62,10 @@ userSchema.methods = {
             return '';
         }
     },
- 
+
     makeSalt: function() {
         return Math.round(new Date().valueOf() * Math.random()) + '';
     }
 };
- 
-module.exports = mongoose.model('User', userSchema);
+
+module.exports = mongoose.model('User', userScheama);

@@ -1,5 +1,6 @@
 const User = require('../models/user');
 const jwt = require('jsonwebtoken');
+const expressJwt = require('express-jwt');
 // sendgrid
 const sgMail = require('@sendgrid/mail');
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
@@ -133,3 +134,20 @@ exports.signin = (req, res) => {
         });
     });
 };
+
+// middleware
+    // auth
+exports.requireSignin = expressJwt({
+    secret: process.env.JWT_SECRET // req.user
+});
+
+    // admin
+    exports.adminMiddleware = (req, res, next) => {
+        User.findById({ _id: req.user._id }).exec((err, user) => {
+            if (err || !user) {
+                return res.status(400).json({
+                    error: 'User not found'
+                });
+            }
+        })
+    }
