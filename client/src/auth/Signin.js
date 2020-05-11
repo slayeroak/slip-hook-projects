@@ -4,12 +4,13 @@ import Layout from '../core/Layout';
 import axios from 'axios';
 import { authenticate, isAuth } from './helpers';
 import { ToastContainer, toast } from 'react-toastify';
+import Google from './Google';
 import 'react-toastify/dist/ReactToastify.min.css';
 
 const Signin = ({ history }) => {
     const [values, setValues] = useState({
-        email: 'hello@sliphook.fish',
-        password: 'test123',
+        email: 'kaloraatjs@gmail.com',
+        password: 'rrrrrr',
         buttonText: 'Submit'
     });
 
@@ -18,6 +19,12 @@ const Signin = ({ history }) => {
     const handleChange = name => event => {
         // console.log(event.target.value);
         setValues({ ...values, [name]: event.target.value });
+    };
+
+    const informParent = response => {
+        authenticate(response, () => {
+            isAuth() && isAuth().role === 'admin' ? history.push('/admin') : history.push('/private');
+        });
     };
 
     const clickSubmit = event => {
@@ -47,12 +54,12 @@ const Signin = ({ history }) => {
     const signinForm = () => (
         <form>
             <div className="form-group">
-                <lable className="text-muted">Email</lable>
+                <label className="text-muted">Email</label>
                 <input onChange={handleChange('email')} value={email} type="email" className="form-control" />
             </div>
 
             <div className="form-group">
-                <lable className="text-muted">Password</lable>
+                <label className="text-muted">Password</label>
                 <input onChange={handleChange('password')} value={password} type="password" className="form-control" />
             </div>
 
@@ -70,7 +77,12 @@ const Signin = ({ history }) => {
                 <ToastContainer />
                 {isAuth() ? <Redirect to="/" /> : null}
                 <h1 className="p-5 text-center">Signin</h1>
+                <Google informParent={informParent} />
                 {signinForm()}
+                <br />
+                <Link to="/auth/password/forgot" className="btn btn-sm btn-outline-danger">
+                    Forgot Password
+                </Link>
             </div>
         </Layout>
     );

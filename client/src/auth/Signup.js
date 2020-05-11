@@ -9,8 +9,8 @@ import 'react-toastify/dist/ReactToastify.min.css';
 const Signup = () => {
     const [values, setValues] = useState({
         name: 'Ryan',
-        email: 'hello@sliphok.fish',
-        password: 'test123',
+        email: 'kaloraatjs@gmail.com',
+        password: 'rrrrrr',
         buttonText: 'Submit'
     });
 
@@ -44,17 +44,17 @@ const Signup = () => {
     const signupForm = () => (
         <form>
             <div className="form-group">
-                <lable className="text-muted">Name</lable>
+                <label className="text-muted">Name</label>
                 <input onChange={handleChange('name')} value={name} type="text" className="form-control" />
             </div>
 
             <div className="form-group">
-                <lable className="text-muted">Email</lable>
+                <label className="text-muted">Email</label>
                 <input onChange={handleChange('email')} value={email} type="email" className="form-control" />
             </div>
 
             <div className="form-group">
-                <lable className="text-muted">Password</lable>
+                <label className="text-muted">Password</label>
                 <input onChange={handleChange('password')} value={password} type="password" className="form-control" />
             </div>
 
@@ -73,6 +73,10 @@ const Signup = () => {
                 {isAuth() ? <Redirect to="/" /> : null}
                 <h1 className="p-5 text-center">Signup</h1>
                 {signupForm()}
+                <br />
+                <Link to="/auth/password/forgot" className="btn btn-sm btn-outline-danger">
+                    Forgot Password
+                </Link>
             </div>
         </Layout>
     );
