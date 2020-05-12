@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const crypto = require('crypto');
+const uuidv1 = require("uuid/v1");
 // user schema
 const userScheama = new mongoose.Schema(
     {
@@ -28,6 +29,14 @@ const userScheama = new mongoose.Schema(
         resetPasswordLink: {
             data: String,
             default: ''
+        },
+        about: {
+            type: String,
+            trim: true
+        },
+        history: {
+            type: Array,
+            default: []
         }
     },
     { timestamps: true }
